@@ -1,0 +1,30 @@
+{
+  "name": "@infomaniak/mcp-server-kdrive",
+  "version": "0.0.1",
+  "description": "MCP server for interacting with Infomaniak kDrive",
+  "license": "MIT",
+  "author": "Infonaniak (https://infomaniak.com)",
+  "homepage": "https://infomaniak.com",
+  "bugs": "https://github.com/infomaniak/mcp-server-kdrive/issues",
+  "type": "module",
+  "bin": {
+    "mcp-server-kdrive": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && shx chmod +x dist/*.js",
+    "prepare": "npm run build",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.12.0",
+    "zod": "3.25.20"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "shx": "^0.3.4",
+    "typescript": "^5.6.2"
+  }
+}
