@@ -6,6 +6,8 @@ MCP Server for the kDrive API.
 
 1. `kdrive_search`
     - Search in kDrive
+    - Required inputs:
+      - `query` (string): Search query
     - Returns: List of files
 
 ## Setup
