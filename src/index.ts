@@ -268,7 +268,7 @@ class KdriveClient {
         return response.json()
     }
 
-    async downloadFile(file_id: string): Promise<any> {
+    async downloadFile(file_id: string): Promise<ArrayBuffer> {
         const response = await fetch(
             `https://api.infomaniak.com/2/drive/${drive_id}/files/${file_id}/download`,
             {
@@ -276,7 +276,7 @@ class KdriveClient {
             },
         );
 
-        return response.text()
+        return response.arrayBuffer()
     }
 }
 
@@ -428,23 +428,6 @@ server.tool(
 );
 
 server.tool(
-    "kdrive_share_access",
-    "Give access to a file or directory by email invitation",
-    {
-        file_id: z.number().describe("File or directory ID"),
-        emails: z.array(z.string()).describe("List of recipient emails"),
-        right: z.enum(["manage", "read", "write"]).describe("Access level"),
-        message: z.string().optional().describe("Optional invitation message"),
-    },
-    async ({file_id, emails, right, message}) => {
-        const response = await kDriveClient.shareAccess(file_id, emails, right, message ?? undefined);
-        return {
-            content: [{type: "text", text: JSON.stringify(response)}],
-        };
-    }
-);
-
-server.tool(
     "kdrive_create_folder",
     "Create a folder in kDrive",
     {
@@ -536,11 +519,12 @@ server.resource(
     async function (uri, datas) {
         const response = await kDriveClient.downloadFile(datas.id.toString());
         const file = await kDriveClient.getFile(datas.id.toString());
+        const buffer = Buffer.from(response);
 
         return {
             contents: [{
                 uri: uri.href,
-                blob: btoa(response),
+                blob: buffer.toString('base64'),
                 mimeType: file.data.mime_type
             }]
         };
