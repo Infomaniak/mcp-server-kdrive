@@ -20,34 +20,40 @@ MCP Server for the kDrive API.
       - Optional: `directory_id` (number): Destination folder ID (default: root=1)
     - Returns: Uploaded file metadata
 
-3. `kdrive_list`
+3. `kdrive_download_file`
+    - Download a file from kDrive
+    - Required inputs:
+      - `file_id` (number): ID of the file to download
+    - Returns: File content as base64-encoded string (MIME type can be obtained via `kdrive_info`)
+
+4. `kdrive_list`
     - List files and directories in a folder
     - Required inputs:
       - Optional: `file_id` (number): Folder ID (default: root=1)
       - Optional: `type` (string): Filter by `file` or `dir`
     - Returns: Array of files and/or directories
 
-4. `kdrive_rename`
+5. `kdrive_rename`
     - Rename a file or directory
     - Required inputs:
       - `file_id` (number): File or directory ID
       - `name` (string): New name
     - Returns: Updated item metadata
 
-5. `kdrive_move`
+6. `kdrive_move`
     - Move a file or directory to another folder
     - Required inputs:
       - `file_id` (number): Item to move
       - `dest_id` (number): Destination folder ID
     - Returns: Moved item metadata
 
-6. `kdrive_delete`
+7. `kdrive_delete`
     - Move a file or directory to the trash
     - Required inputs:
       - `file_id` (number): Item to delete
     - Returns: Trash result
 
-7. `kdrive_share_link`
+8. `kdrive_share_link`
     - Create a share link for a file or directory
     - Required inputs:
       - `file_id` (number): Item to share
@@ -55,7 +61,7 @@ MCP Server for the kDrive API.
       - Optional: `password`, `valid_until`, `can_download`, `can_edit`, `can_request_access`
     - Returns: Share link object
 
-8. `kdrive_share_access`
+9. `kdrive_share_access`
     - Give access to a file or directory by email invitation
     - Required inputs:
       - `file_id` (number): Item to share
@@ -64,33 +70,33 @@ MCP Server for the kDrive API.
       - Optional: `message` (string): Invitation text
     - Returns: Invitation feedback
 
-9. `kdrive_create_folder`
+10. `kdrive_create_folder`
     - Create a new folder in kDrive
     - Required inputs:
       - `name` (string): Name of the folder
       - Optional: `file_id` (number): Parent directory ID (default: root=1)
     - Returns: Created folder metadata
 
-10. `kdrive_restore`
+11. `kdrive_restore`
     - Restore a file or directory from the trash
     - Required inputs:
       - `file_id` (number): Item ID to restore
       - `destination_directory_id` (number): Directory to restore into
     - Returns: Restored item metadata
 
-11. `kdrive_info`
+12. `kdrive_info`
     - Get metadata and info about a file or directory
     - Required inputs:
       - `file_id` (number): Item ID
     - Returns: File/directory metadata
 
-12. `kdrive_recents`
+13. `kdrive_recents`
     - List recently used files and directories
     - Required inputs:
       - Optional: `type` (string): Filter by `dir`, `file`, or `vault`
     - Returns: Array of recent items
 
-13. `kdrive_shared_with_me`
+14. `kdrive_shared_with_me`
     - List files and directories shared with you
     - Required inputs:
       - Optional: `type` (string): Filter by `dir`, `file`, or `vault`

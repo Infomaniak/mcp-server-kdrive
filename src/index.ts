@@ -208,6 +208,21 @@ server.tool(
 );
 
 server.tool(
+    "kdrive_download_file",
+    "Download a file from kDrive and return its content as base64",
+    {
+        file_id: z.number().describe("File ID to download"),
+    },
+    async ({file_id}) => {
+        const response = await kDriveClient.downloadFile(file_id.toString());
+        const buffer = Buffer.from(response);
+        return {
+            content: [{type: "text", text: buffer.toString('base64')}],
+        };
+    }
+);
+
+server.tool(
     "kdrive_info",
     "Get metadata about a file or directory",
     {
