@@ -1,6 +1,6 @@
 {
   "name": "@infomaniak/mcp-server-kdrive",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "MCP server for interacting with Infomaniak kDrive",
   "license": "MIT",
   "author": "Infonaniak (https://infomaniak.com)",
