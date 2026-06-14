@@ -18,7 +18,7 @@ if (!token || !drive_id) {
 const server = new McpServer(
     {
         name: "kDrive MCP Server",
-        version: "1.1.0",
+        version: "1.1.1",
     },
     {
         capabilities: {
