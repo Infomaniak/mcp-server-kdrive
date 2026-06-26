@@ -4,6 +4,10 @@ import {McpServer, ResourceTemplate} from "@modelcontextprotocol/sdk/server/mcp.
 import {z} from "zod";
 import {StdioServerTransport} from "@modelcontextprotocol/sdk/server/stdio.js";
 import {KdriveClient} from "./kdrive-client.js";
+import {createRequire} from "node:module";
+
+const require = createRequire(import.meta.url);
+const {version} = require("../package.json") as {version: string};
 
 const token = process.env.KDRIVE_TOKEN;
 const drive_id = process.env.KDRIVE_ID;
@@ -18,7 +22,7 @@ if (!token || !drive_id) {
 const server = new McpServer(
     {
         name: "kDrive MCP Server",
-        version: "1.1.1",
+        version,
     },
     {
         capabilities: {
