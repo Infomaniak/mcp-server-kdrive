@@ -56,7 +56,7 @@ export class KdriveClient {
                     Authorization: `Bearer ${this.token}`,
                     "Content-Type": "application/octet-stream",
                 },
-                body: buffer,
+                body: new Uint8Array(buffer),
             },
         );
 

@@ -98,7 +98,12 @@ describe("KdriveClient.uploadFile", () => {
       await client.uploadFile("test.bin", 1, undefined, "aGVsbG8=");
 
       assert.ok(capturedBody, "body was provided");
-      assert.ok(Buffer.isBuffer(capturedBody), "body is a Buffer");
+      assert.ok(capturedBody instanceof Uint8Array, "body is a Uint8Array");
+      assert.equal(
+        Buffer.from(capturedBody).toString(),
+        "hello",
+        "body contains the decoded base64 content",
+      );
     } finally {
       restore();
     }
