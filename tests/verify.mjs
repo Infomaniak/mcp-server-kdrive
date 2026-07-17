@@ -52,6 +52,56 @@ describe("KdriveClient.search", () => {
       restore();
     }
   });
+
+  test("scopes search to a directory when directory_id provided", async () => {
+    let capturedUrl = null;
+    const restore = mockFetch(async (url) => {
+      capturedUrl = url;
+      return { json: async () => ({ result: "success", data: [] }) };
+    });
+
+    try {
+      const client = new KdriveClient("mock-token", "123");
+      await client.search("test", { directory_id: 91535 });
+      assert.ok(capturedUrl.includes("directory_id=91535"), "URL contains directory_id");
+    } finally {
+      restore();
+    }
+  });
+
+  test("passes depth parameter when provided", async () => {
+    let capturedUrl = null;
+    const restore = mockFetch(async (url) => {
+      capturedUrl = url;
+      return { json: async () => ({ result: "success", data: [] }) };
+    });
+
+    try {
+      const client = new KdriveClient("mock-token", "123");
+      await client.search("test", { directory_id: 10, depth: "unlimited" });
+      assert.ok(capturedUrl.includes("directory_id=10"), "URL contains directory_id");
+      assert.ok(capturedUrl.includes("depth=unlimited"), "URL contains depth");
+    } finally {
+      restore();
+    }
+  });
+
+  test("does not include directory_id or depth when not provided", async () => {
+    let capturedUrl = null;
+    const restore = mockFetch(async (url) => {
+      capturedUrl = url;
+      return { json: async () => ({ result: "success", data: [] }) };
+    });
+
+    try {
+      const client = new KdriveClient("mock-token", "123");
+      await client.search("test");
+      assert.ok(!capturedUrl.includes("directory_id"), "URL does not contain directory_id");
+      assert.ok(!capturedUrl.includes("depth"), "URL does not contain depth");
+    } finally {
+      restore();
+    }
+  });
 });
 
 describe("KdriveClient.uploadFile", () => {
@@ -139,6 +189,55 @@ describe("KdriveClient.listFiles", () => {
       const client = new KdriveClient("mock-token", "123");
       await client.listFiles(10, { type: "file" });
       assert.ok(capturedUrl.includes("type%5B%5D=file"), "URL contains type filter");
+    } finally {
+      restore();
+    }
+  });
+
+  test("lists files with cursor for pagination", async () => {
+    let capturedUrl = null;
+    const restore = mockFetch(async (url) => {
+      capturedUrl = url;
+      return { json: async () => ({ result: "success", data: [] }) };
+    });
+
+    try {
+      const client = new KdriveClient("mock-token", "123");
+      await client.listFiles(10, { cursor: "SGVsbG8gV29ybGQ" });
+      assert.ok(capturedUrl.includes("cursor=SGVsbG8gV29ybGQ"), "URL contains cursor");
+    } finally {
+      restore();
+    }
+  });
+
+  test("lists files with both type filter and cursor", async () => {
+    let capturedUrl = null;
+    const restore = mockFetch(async (url) => {
+      capturedUrl = url;
+      return { json: async () => ({ result: "success", data: [] }) };
+    });
+
+    try {
+      const client = new KdriveClient("mock-token", "123");
+      await client.listFiles(10, { type: "dir", cursor: "abc123" });
+      assert.ok(capturedUrl.includes("type%5B%5D=dir"), "URL contains type filter");
+      assert.ok(capturedUrl.includes("cursor=abc123"), "URL contains cursor");
+    } finally {
+      restore();
+    }
+  });
+
+  test("does not include cursor when not provided", async () => {
+    let capturedUrl = null;
+    const restore = mockFetch(async (url) => {
+      capturedUrl = url;
+      return { json: async () => ({ result: "success", data: [] }) };
+    });
+
+    try {
+      const client = new KdriveClient("mock-token", "123");
+      await client.listFiles(10);
+      assert.ok(!capturedUrl.includes("cursor"), "URL does not contain cursor");
     } finally {
       restore();
     }

@@ -8,6 +8,9 @@ MCP Server for the kDrive API.
     - Search in kDrive
     - Required inputs:
       - `query` (string): Search query
+    - Optional inputs:
+      - `directory_id` (number): Directory ID to scope the search to a specific folder subtree (default: root)
+      - `depth` (string): Search depth when `directory_id` is set — `unlimited` (recursive) or `child` (immediate children only)
     - Returns: List of files
 
 2. `kdrive_upload_file`
@@ -31,7 +34,8 @@ MCP Server for the kDrive API.
     - Required inputs:
       - Optional: `file_id` (number): Folder ID (default: root=1)
       - Optional: `type` (string): Filter by `file` or `dir`
-    - Returns: Array of files and/or directories
+      - Optional: `cursor` (string): Pagination cursor returned by a previous call when `has_more` was `true`, used to fetch the next page of results
+    - Returns: Array of files and/or directories, plus `has_more` (boolean) and `cursor` (string) when more entries are available
 
 5. `kdrive_rename`
     - Rename a file or directory

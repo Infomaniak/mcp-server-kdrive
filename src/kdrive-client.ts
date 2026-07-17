@@ -12,11 +12,17 @@ export class KdriveClient {
         };
     }
 
-    async search(query: string): Promise<any> {
+    async search(query: string, options?: { directory_id?: number; depth?: string }): Promise<any> {
         const params = new URLSearchParams({
             query,
             limit: "10"
         });
+        if (options?.directory_id !== undefined) {
+            params.set("directory_id", options.directory_id.toString());
+        }
+        if (options?.depth) {
+            params.set("depth", options.depth);
+        }
 
         const response = await fetch(
             `https://api.infomaniak.com/3/drive/${this.driveId}/files/search?${params}`,
@@ -63,10 +69,13 @@ export class KdriveClient {
         return response.json();
     }
 
-    async listFiles(file_id = 1, filters?: { type?: string }): Promise<any> {
+    async listFiles(file_id = 1, filters?: { type?: string; cursor?: string }): Promise<any> {
         const params = new URLSearchParams();
         if (filters?.type) {
             params.set("type[]", filters.type);
+        }
+        if (filters?.cursor) {
+            params.set("cursor", filters.cursor);
         }
         const query = params.toString() ? `?${params}` : "";
 
