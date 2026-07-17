@@ -38,12 +38,14 @@ const kDriveClient = new KdriveClient(token, drive_id);
 
 server.tool(
     "kdrive_search",
-    "Search for files in Infomanik kDrive",
+    "Search for files in Infomanik kDrive. Use directory_id to scope the search to a specific folder subtree, and depth to control whether the search is recursive (unlimited) or limited to immediate children (child).",
     {
-        query: z.string().describe("Search query")
+        query: z.string().describe("Search query"),
+        directory_id: z.number().optional().describe("Directory ID to scope the search to a specific folder subtree (default: root)"),
+        depth: z.enum(["child", "unlimited"]).optional().describe("Search depth: 'unlimited' for recursive search within the directory, 'child' for immediate children only. Use with directory_id."),
     },
-    async ({query}) => {
-        const response = await kDriveClient.search(query);
+    async ({query, directory_id, depth}) => {
+        const response = await kDriveClient.search(query, { directory_id, depth });
 
         return {
             content: [{type: "text", text: JSON.stringify(response)}],
