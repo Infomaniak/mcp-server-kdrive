@@ -63,10 +63,13 @@ export class KdriveClient {
         return response.json();
     }
 
-    async listFiles(file_id = 1, filters?: { type?: string }): Promise<any> {
+    async listFiles(file_id = 1, filters?: { type?: string; cursor?: string }): Promise<any> {
         const params = new URLSearchParams();
         if (filters?.type) {
             params.set("type[]", filters.type);
+        }
+        if (filters?.cursor) {
+            params.set("cursor", filters.cursor);
         }
         const query = params.toString() ? `?${params}` : "";
 

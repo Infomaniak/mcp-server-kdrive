@@ -143,6 +143,55 @@ describe("KdriveClient.listFiles", () => {
       restore();
     }
   });
+
+  test("lists files with cursor for pagination", async () => {
+    let capturedUrl = null;
+    const restore = mockFetch(async (url) => {
+      capturedUrl = url;
+      return { json: async () => ({ result: "success", data: [] }) };
+    });
+
+    try {
+      const client = new KdriveClient("mock-token", "123");
+      await client.listFiles(10, { cursor: "SGVsbG8gV29ybGQ" });
+      assert.ok(capturedUrl.includes("cursor=SGVsbG8gV29ybGQ"), "URL contains cursor");
+    } finally {
+      restore();
+    }
+  });
+
+  test("lists files with both type filter and cursor", async () => {
+    let capturedUrl = null;
+    const restore = mockFetch(async (url) => {
+      capturedUrl = url;
+      return { json: async () => ({ result: "success", data: [] }) };
+    });
+
+    try {
+      const client = new KdriveClient("mock-token", "123");
+      await client.listFiles(10, { type: "dir", cursor: "abc123" });
+      assert.ok(capturedUrl.includes("type%5B%5D=dir"), "URL contains type filter");
+      assert.ok(capturedUrl.includes("cursor=abc123"), "URL contains cursor");
+    } finally {
+      restore();
+    }
+  });
+
+  test("does not include cursor when not provided", async () => {
+    let capturedUrl = null;
+    const restore = mockFetch(async (url) => {
+      capturedUrl = url;
+      return { json: async () => ({ result: "success", data: [] }) };
+    });
+
+    try {
+      const client = new KdriveClient("mock-token", "123");
+      await client.listFiles(10);
+      assert.ok(!capturedUrl.includes("cursor"), "URL does not contain cursor");
+    } finally {
+      restore();
+    }
+  });
 });
 
 describe("KdriveClient.rename", () => {

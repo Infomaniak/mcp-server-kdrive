@@ -81,13 +81,14 @@ server.tool(
 
 server.tool(
     "kdrive_list",
-    "List files and directories in a folder",
+    "List files and directories in a folder. The response may include `has_more` and a `cursor` when more entries exist; pass that `cursor` to retrieve the next page.",
     {
         file_id: z.number().optional().describe("Directory ID (default is root = 1)"),
         type: z.enum(["file", "dir"]).optional().describe("Filter by type: file or dir"),
+        cursor: z.string().optional().describe("Pagination cursor returned by a previous call when `has_more` was true, used to fetch the next page of results"),
     },
-    async ({file_id, type}) => {
-        const response = await kDriveClient.listFiles(file_id ?? 1, type ? { type } : undefined);
+    async ({file_id, type, cursor}) => {
+        const response = await kDriveClient.listFiles(file_id ?? 1, { type, cursor });
         return {
             content: [{type: "text", text: JSON.stringify(response)}],
         };
