@@ -22,4 +22,6 @@ WORKDIR /app
 
 RUN npm ci --ignore-scripts --omit-dev
 
+USER node
+
 ENTRYPOINT ["node", "dist/index.js"]
